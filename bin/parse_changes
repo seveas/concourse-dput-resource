@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+import email
+import json
+import sys
+
+with open(sys.argv[1]) as fd:
+    msg = fd.read()
+msg = email.message_from_string(msg[msg.find('Format:'):])
+msg = {key: msg[key] for key in msg.keys()}
+
+#for key in 'Files', 'Checksums-Sha256', 'Checksums-Sha1':
+#    if key in msg:
+#        msg[key] = [line.strip().split() for line in msg[key].splitlines()]
+data = {
+    'version': {'version': msg['Version']},
+    'metadata': [{'name': key, 'value': msg[key]} for key in msg]
+}
+json.dump(data, sys.stdout)
