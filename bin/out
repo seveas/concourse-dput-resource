@@ -9,6 +9,18 @@ cd $1
 jq . <&0 >params
 archive=$(jq -r .params.archive < params)
 glob=$(jq -r .params.glob < params)
+count=$(ls $glob 2>/dev/null | wc -l)
+allow_noop=$(jq -r .params.allow_noop < params)
+case "$count,$allow_noop" in
+    0,true)
+        echo '{"version": {"version": "0.0"}, "metadata": []}' >&3
+        exit 0
+        ;;
+    0,*)
+        echo "No files matching $glob found"
+        exit 1
+        ;;
+esac
 gpg --auto-key-retrieve --multifile --verify $glob
 dput "$archive" $glob || exit $?
 /opt/resource/parse_changes $glob >&3
