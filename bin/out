@@ -9,6 +9,6 @@ cd $1
 jq . <&0 >params
 archive=$(jq -r .params.archive < params)
 glob=$(jq -r .params.glob < params)
-gpg --auto-key-retrieve --verify $glob
+gpg --auto-key-retrieve --multifile --verify $glob
 dput "$archive" $glob || exit $?
 /opt/resource/parse_changes $glob >&3
