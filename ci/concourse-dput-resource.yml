@@ -1,0 +1,24 @@
+---
+resources:
+  - name: git
+    type: git
+    source: 
+      uri: https://github.com/seveas/concourse-dput-resource.git
+      branch: master
+
+  - name: docker
+    type: docker-image
+    source:
+      repository: seveas/concourse-dput-resource
+      tag: latest
+      username: ((docker-username))
+      password: ((docker-password))
+
+jobs:
+  - name: publish
+    plan:
+      - get: git
+        trigger: true
+      - put: docker
+        params:
+          build: git
