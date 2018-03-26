@@ -7,7 +7,7 @@ set -x
 
 cd $1
 jq . <&0 >params
-archive=$(jq -r .params.archive < params)
+archive=$(jq -r .source.archive < params)
 glob=$(jq -r .params.glob < params)
 count=$(ls $glob 2>/dev/null | wc -l)
 allow_noop=$(jq -r .params.allow_noop < params)
