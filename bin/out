@@ -21,6 +21,5 @@ case "$count,$allow_noop" in
         exit 1
         ;;
 esac
-gpg --auto-key-retrieve --multifile --verify $glob
-dput "$archive" $glob || exit $?
+dput -u "$archive" $glob || exit $?
 /opt/resource/parse_changes $glob >&3
